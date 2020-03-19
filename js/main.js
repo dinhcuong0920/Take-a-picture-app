@@ -1,10 +1,3 @@
-/*
-
->> kasperkamperman.com - 2018-04-18
->> https://www.kasperkamperman.com/blog/camera-template/
-
-*/
-
 var takeSnapshotUI = createClickFeedbackUI();
 
 var video;
@@ -14,8 +7,7 @@ var switchCameraButton;
 var amountOfCameras = 0;
 var currentFacingMode = 'environment';
 
-document.addEventListener('DOMContentLoaded', function(event) {
-  // do some WebRTC checks before creating the interface
+$(document).ready(function () {
   DetectRTC.load(function() {
     // do some checks
     if (DetectRTC.isWebRTCSupported == false) {
@@ -32,32 +24,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
         initCameraStream();
       }
     }
-
-    console.log(
-      'RTC Debug info: ' +
-        '\n OS:                   ' +
-        DetectRTC.osName +
-        ' ' +
-        DetectRTC.osVersion +
-        '\n browser:              ' +
-        DetectRTC.browser.fullVersion +
-        ' ' +
-        DetectRTC.browser.name +
-        '\n is Mobile Device:     ' +
-        DetectRTC.isMobileDevice +
-        '\n has webcam:           ' +
-        DetectRTC.hasWebcam +
-        '\n has permission:       ' +
-        DetectRTC.isWebsiteHasWebcamPermission +
-        '\n getUserMedia Support: ' +
-        DetectRTC.isGetUserMediaSupported +
-        '\n isWebRTC Supported:   ' +
-        DetectRTC.isWebRTCSupported +
-        '\n WebAudio Supported:   ' +
-        DetectRTC.isAudioContextSupported +
-        '\n is Mobile Device:     ' +
-        DetectRTC.isMobileDevice,
-    );
   });
 });
 
@@ -68,9 +34,7 @@ function initCameraUI() {
   toggleFullScreenButton = document.getElementById('toggleFullScreenButton');
   switchCameraButton = document.getElementById('switchCameraButton');
 
-  // https://developer.mozilla.org/nl/docs/Web/HTML/Element/button
-  // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_button_role
-
+ 
   takePhotoButton.addEventListener('click', function() {
     takeSnapshotUI();
     takeSnapshot();
@@ -118,10 +82,7 @@ function initCameraUI() {
     });
   }
 
-  // Listen for orientation changes to make sure buttons stay at the side of the
-  // physical (and virtual) buttons (opposite of camera) most of the layout change is done by CSS media queries
-  // https://www.sitepoint.com/introducing-screen-orientation-api/
-  // https://developer.mozilla.org/en-US/docs/Web/API/Screen/orientation
+ 
   window.addEventListener(
     'orientationchange',
     function() {
@@ -150,7 +111,6 @@ function initCameraUI() {
   );
 }
 
-// https://github.com/webrtc/samples/blob/gh-pages/src/content/devices/input-output/js/main.js
 function initCameraStream() {
   // stop any active streams in the window
   if (window.stream) {
@@ -210,7 +170,6 @@ function initCameraStream() {
 }
 
 function takeSnapshot() {
-  // if you'd like to show the canvas add it to the DOM
   var canvas = document.createElement('canvas');
 
   var width = video.videoWidth;
@@ -222,11 +181,7 @@ function takeSnapshot() {
   context = canvas.getContext('2d');
   context.drawImage(video, 0, 0, width, height);
 
-  // polyfil if needed https://github.com/blueimp/JavaScript-Canvas-to-Blob
-
-  // https://developers.google.com/web/fundamentals/primers/promises
-  // https://stackoverflow.com/questions/42458849/access-blob-value-outside-of-canvas-toblob-async-function
-  function getCanvasBlob(canvas) {
+    function getCanvasBlob(canvas) {
     return new Promise(function(resolve, reject) {
       canvas.toBlob(function(blob) {
         resolve(blob);
@@ -234,16 +189,11 @@ function takeSnapshot() {
     });
   }
 
-  // some API's (like Azure Custom Vision) need a blob with image data
   getCanvasBlob(canvas).then(function(blob) {
-    // do something with the image blob
+    console.log(blob);
   });
 }
 
-// https://hackernoon.com/how-to-use-javascript-closures-with-confidence-85cd1f841a6b
-// closure; store this in a variable and call the variable as function
-// eg. var takeSnapshotUI = createClickFeedbackUI();
-// takeSnapshotUI();
 
 function createClickFeedbackUI() {
   // in order to give feedback that we actually pressed a button.
